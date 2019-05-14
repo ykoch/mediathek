@@ -22,7 +22,6 @@ public class Vormerkkarte
 {
 
     // Eigenschaften einer Verleihkarte
-    private Kunde _vormerker;
     private final Medium _medium;
     private List<Kunde> _vormerkerliste;
 
@@ -46,37 +45,46 @@ public class Vormerkkarte
         assert vormerker != null : "Vorbedingung verletzt: entleiher != null";
         assert medium != null : "Vorbedingung verletzt: medium != null";
 
-        _vormerker = vormerker;
         _medium = medium;
         _vormerkerliste = new LinkedList<Kunde>();
         _vormerkerliste.add(vormerker);
     }
 
     /**
-     * Gibt den Vormerker zurück.
+     * Gibt den ersten Vormerker zurück. Es kann auch keinen Vormerker geben. 
      * 
-     * @return den Kunden, der das Medium vorgemerkt hat.
+     * @return den ersten Kunden, der das Medium vorgemerkt hat.
      * 
      * @ensure result != null
      */
-    public Kunde getVormerker()
+    public Kunde getErstenVormerker()
     {
-        return _vormerker;
+        return _vormerkerliste.get(0);
     }
 
     /**
-     * Gibt eine String-Darstellung der Vormerkkarte (enhält Zeilenumbrüche)
-     * zurück.
+     * Gibt Liste der Vormerker zurück. Kann 0 bis 3 Vormerker sein. 
      * 
-     * @return Eine formatierte Stringrepäsentation der Vormerkkarte. Enthält
-     *         Zeilenumbrüche.
+     * @return Liste der Kunden, die das Medium vorgemerkt hat.
      * 
      * @ensure result != null
      */
-    public String getFormatiertenString()
+    public List<Kunde> getAlleVormerker()
     {
-        return _medium.getFormatiertenString() + " vorgemerkt an\n"
-                + _vormerker.getFormatiertenString();
+        return _vormerkerliste;
+    }
+
+    /**
+     * Gibt den Vormerker an der Indexposition zurück
+     * 
+     * @param Index des Vormerkerarrays
+     * @return Den Kunden, der das Medium vorgemerkt hat
+     * 
+     * @ensure result != null
+     */
+    public Kunde getVormerkerAnPosition(int index)
+    {
+        return _vormerkerliste.get(index);
     }
 
     /**
@@ -91,26 +99,36 @@ public class Vormerkkarte
         return _medium;
     }
 
+    /**
+     * Gibt zurück, ob die Vormerkkarte voll ist, das heißt, ob es bereits 3 Vormerker für das Medium gibt
+     * 
+     * @return ob die Vormerkkarte voll ist
+     * @ensure result != null
+     */
     public boolean istVormerkkarteVoll()
     {
         return (_vormerkerliste.size() == 3);
     }
 
-    public List<Kunde> getAlleVormerker()
-    {
-        return _vormerkerliste;
-    }
-
-    public Kunde getVormerkerAnPosition(int index)
-    {
-        return _vormerkerliste.get(index);
-    }
-
+    /**
+     * Entfernt einen Kunden von der Vormerkkarte
+     * 
+     * @param den zu entfernende Kunde
+     * 
+     * @ensure result != null
+     */
     public void entferneVormerker(Kunde vormerker)
     {
         _vormerkerliste.remove(vormerker);
     }
 
+    /**
+     * Fügt einen Kunden zu der Vormerkkarte hinzu
+     * 
+     * @param den hinzuzufügende Kunde
+     * 
+     * @ensure result != null
+     */
     public void fuegeVormerkerHinzu(Kunde vormerker)
     {
         if (!istVormerkkarteVoll())
@@ -119,13 +137,35 @@ public class Vormerkkarte
         }
     }
 
+    /**
+     * Gibt eine String-Darstellung der Vormerkkarte (enhält Zeilenumbrüche)
+     * zurück.
+     * 
+     * @return Eine formatierte Stringrepäsentation der Vormerkkarte. Enthält
+     *         Zeilenumbrüche.
+     * 
+     * @ensure result != null
+     */
+    public String getFormatiertenString()
+    {
+        String vormerkersatz = "Keine Vormerkungen";
+        for (Kunde vormerker : _vormerkerliste)
+        {
+            vormerkersatz = "";
+            vormerkersatz = vormerkersatz + vormerker + " , ";
+        }
+
+        return _medium.getFormatiertenString() + " vorgemerkt an\n"
+                + vormerkersatz;
+    }
+
     @Override
     public int hashCode()
     {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((_vormerker == null) ? 0 : _vormerker.hashCode());
+                + ((_vormerkerliste == null) ? 0 : _vormerkerliste.hashCode());
         result = prime * result + ((_medium == null) ? 0 : _medium.hashCode());
         return result;
     }
@@ -138,8 +178,8 @@ public class Vormerkkarte
         {
             Vormerkkarte other = (Vormerkkarte) obj;
 
-            if (other.getVormerker()
-                .equals(_vormerker)
+            if (other.getAlleVormerker()
+                .equals(_vormerkerliste)
                     && other.getMedium()
                         .equals(_medium))
 

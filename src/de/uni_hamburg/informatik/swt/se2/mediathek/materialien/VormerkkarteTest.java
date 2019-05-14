@@ -1,5 +1,6 @@
 package de.uni_hamburg.informatik.swt.se2.mediathek.materialien;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -27,7 +28,15 @@ public class VormerkkarteTest
     }
 
     @Test
-    public void testeVormerkungeHinzugefuegt()
+    public void testeKonstruktor() throws Exception
+    {
+        assertEquals(_vormerker1, _vormerkkarte.getErstenVormerker());
+        assertEquals(_vormerker1, _vormerkkarte.getAlleVormerker());
+        assertEquals(_medium, _vormerkkarte.getMedium());
+    }
+
+    @Test
+    public void testeVormerkungHinzugefuegt()
     {
         assertTrue(_vormerkkarte.getAlleVormerker()
             .size() == 1);
