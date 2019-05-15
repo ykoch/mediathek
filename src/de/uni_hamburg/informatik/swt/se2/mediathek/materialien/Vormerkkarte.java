@@ -52,13 +52,15 @@ public class Vormerkkarte
 
     /**
      * Gibt den ersten Vormerker zurück. Es kann auch keinen Vormerker geben. 
-     * 
+     * @require _vormerkerliste.size() > 0
      * @return den ersten Kunden, der das Medium vorgemerkt hat.
      * 
      * @ensure result != null
      */
     public Kunde getErstenVormerker()
     {
+        assert _vormerkerliste
+            .size() > 0 : "Es gibt keine Vormerker auf dieser Vormerkkarte";
         return _vormerkerliste.get(0);
     }
 
@@ -78,12 +80,14 @@ public class Vormerkkarte
      * Gibt den Vormerker an der Indexposition zurück
      * 
      * @param Index des Vormerkerarrays
+     * @require index >= 0 && index > 3
      * @return Den Kunden, der das Medium vorgemerkt hat
      * 
      * @ensure result != null
      */
     public Kunde getVormerkerAnPosition(int index)
     {
+        assert index >= 0 && index < 3;
         return _vormerkerliste.get(index);
     }
 
@@ -131,10 +135,30 @@ public class Vormerkkarte
      */
     public void fuegeVormerkerHinzu(Kunde vormerker)
     {
-        if (!istVormerkkarteVoll())
+        if (!istVormerkkarteVoll() && !istKundeBereitsVormerker(vormerker))
         {
             _vormerkerliste.add(vormerker);
         }
+    }
+
+    /**
+     * Hilfmethode, die testet, ob der Kunde bereits ein Vormerker auf der Vormerkliste ist
+     * 
+     * @param der zu testende Vormerker
+     * @return ob Kunde bereits Vormerker ist
+     * 
+     * @ensure result != null
+     */
+    private boolean istKundeBereitsVormerker(Kunde vormerker)
+    {
+        for (Kunde kunde : _vormerkerliste)
+        {
+            if (kunde == vormerker)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -174,7 +198,7 @@ public class Vormerkkarte
     public boolean equals(Object obj)
     {
         boolean result = false;
-        if (obj instanceof Verleihkarte)
+        if (obj instanceof Vormerkkarte)
         {
             Vormerkkarte other = (Vormerkkarte) obj;
 
